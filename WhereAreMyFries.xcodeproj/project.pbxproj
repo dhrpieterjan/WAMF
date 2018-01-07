@@ -34,9 +34,11 @@
 		9AADD5241FF92DCF000752C3 /* SnackSectionHeaderCollectionReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AADD5231FF92DCF000752C3 /* SnackSectionHeaderCollectionReusableView.swift */; };
 		9AC8B3B51FADC0A1009E0EFB /* PersonalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AC8B3B41FADC0A1009E0EFB /* PersonalViewController.swift */; };
 		9AC8B3B71FADE117009E0EFB /* BestellingenRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AC8B3B61FADE117009E0EFB /* BestellingenRepository.swift */; };
+		9AD804322002B44200A20B62 /* PersonalRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AD804312002B44200A20B62 /* PersonalRepository.swift */; };
 		9ADD842A1FB4903E00336A41 /* SnackCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ADD84291FB4903E00336A41 /* SnackCollectionViewController.swift */; };
 		9ADD842F1FB499D300336A41 /* SnackCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ADD842D1FB499D300336A41 /* SnackCollectionViewCell.swift */; };
 		9ADD84301FB499D300336A41 /* SnackCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9ADD842E1FB499D300336A41 /* SnackCollectionViewCell.xib */; };
+		9AE6F6A62002D70400365A7F /* bestellingFavorite.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AE6F6A52002D70400365A7F /* bestellingFavorite.swift */; };
 		9AF724721FACBEF700A4668B /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9AF724711FACBEF700A4668B /* CloudKit.framework */; };
 /* End PBXBuildFile section */
 
@@ -72,9 +74,11 @@
 		9AADD5231FF92DCF000752C3 /* SnackSectionHeaderCollectionReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnackSectionHeaderCollectionReusableView.swift; sourceTree = "<group>"; };
 		9AC8B3B41FADC0A1009E0EFB /* PersonalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonalViewController.swift; sourceTree = "<group>"; };
 		9AC8B3B61FADE117009E0EFB /* BestellingenRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BestellingenRepository.swift; sourceTree = "<group>"; };
+		9AD804312002B44200A20B62 /* PersonalRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonalRepository.swift; sourceTree = "<group>"; };
 		9ADD84291FB4903E00336A41 /* SnackCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnackCollectionViewController.swift; sourceTree = "<group>"; };
 		9ADD842D1FB499D300336A41 /* SnackCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnackCollectionViewCell.swift; sourceTree = "<group>"; };
 		9ADD842E1FB499D300336A41 /* SnackCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SnackCollectionViewCell.xib; sourceTree = "<group>"; };
+		9AE6F6A52002D70400365A7F /* bestellingFavorite.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = bestellingFavorite.swift; sourceTree = "<group>"; };
 		9AF7246F1FACBEEF00A4668B /* WhereAreMyFries.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = WhereAreMyFries.entitlements; sourceTree = "<group>"; };
 		9AF724711FACBEF700A4668B /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
@@ -142,9 +146,10 @@
 				9A0479181FA4B2F200937562 /* Persoon.swift */,
 				9A04791C1FA4B3C700937562 /* PersoonlijkeBestelling.swift */,
 				9A04791E1FA4B4CD00937562 /* Frietuur.swift */,
-				9AC8B3B61FADE117009E0EFB /* BestellingenRepository.swift */,
-				9A128F211FBB2488009D0D93 /* SnackRepository.swift */,
 				9A73027020024FBB002F0772 /* FavForPers.swift */,
+				9A128F211FBB2488009D0D93 /* SnackRepository.swift */,
+				9AC8B3B61FADE117009E0EFB /* BestellingenRepository.swift */,
+				9AD804312002B44200A20B62 /* PersonalRepository.swift */,
 			);
 			path = model;
 			sourceTree = "<group>";
@@ -177,6 +182,7 @@
 				9A229E1D1FFA8B4D004FBAA2 /* QRCodeView.xib */,
 				9A229E1F1FFA8B83004FBAA2 /* QRCodeView.swift */,
 				9A73026E20024EF8002F0772 /* FavTableViewCell.swift */,
+				9AE6F6A52002D70400365A7F /* bestellingFavorite.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -332,6 +338,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9AD804322002B44200A20B62 /* PersonalRepository.swift in Sources */,
 				9A04791D1FA4B3C700937562 /* PersoonlijkeBestelling.swift in Sources */,
 				9AC8B3B71FADE117009E0EFB /* BestellingenRepository.swift in Sources */,
 				9A0479131FA4B2CD00937562 /* Bestelling.swift in Sources */,
@@ -347,6 +354,7 @@
 				9A0478FD1FA4B2A400937562 /* AppDelegate.swift in Sources */,
 				9A73026B20019D6A002F0772 /* AddFavoriteViewController.swift in Sources */,
 				9A25F2BD1FF477200044E849 /* ScanQrViewController.swift in Sources */,
+				9AE6F6A62002D70400365A7F /* bestellingFavorite.swift in Sources */,
 				9A229E201FFA8B83004FBAA2 /* QRCodeView.swift in Sources */,
 				9A1C90011FB5919200F7F864 /* BestellingenTableViewCell.swift in Sources */,
 				9AC8B3B51FADC0A1009E0EFB /* PersonalViewController.swift in Sources */,

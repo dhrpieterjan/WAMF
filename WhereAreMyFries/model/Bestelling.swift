@@ -28,7 +28,7 @@ class Bestelling {
         }
     }
     
-    let bestellingenPerPersoon: [Persoon: PersoonlijkeBestelling] = [:]
+    var bestellingenPerPersoon: [String: FavForPers?] = [:]
     
     init(naam: String) {
         self.naam = naam

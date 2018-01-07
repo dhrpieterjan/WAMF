@@ -46,12 +46,87 @@ class BestellingenRepository {
                         if let records = records {
                             
                             for record in records {
-                                let best = Bestelling(naam: record.object(forKey: "name") as! String,                                                                                                       personen: record.object(forKey: "persons") as! [CKRecordID],
+                                var best = Bestelling(naam: record.object(forKey: "name") as! String,
+                                                      personen: record.object(forKey: "persons") as! [CKRecordID],
+                                                      bestForPerson: record.object(forKey: "bestForPerson") as! [CKRecordID],
                                                       creationDate: record.creationDate!)
                                 
                                 best.recordID = record.recordID
+
+                                
+                                let predicate = NSPredicate(format: "recordID IN %@", best.bestForPerson)
+                                let query = CKQuery(recordType: "BestForPerson", predicate: predicate)
+                                
+                                self.database.perform(query, inZoneWith: nil, completionHandler: { (records, error) in
+                                    if error == nil {
+                                        
+                                        var bestForPersoon: [String: FavForPers] = [:]
+                                        
+                                        for record in records! {
+                                            
+                                            let Usernaam = record.object(forKey: "personName") as! String
+                                            
+                                            if let favo = record.object(forKey: "favForPerson") as? CKReference{
+                                                
+                                                self.database.fetch(withRecordID: favo.recordID, completionHandler: { (record, error) in
+                                                    
+                                                    if let record = record {
+                                                        
+                                                        let snacksInFav = record.object(forKey: "snacks") as! [CKRecordID]
+                                                        var snacks: [Snack] = []
+                                                        
+                                                        let predicate = NSPredicate(format: "recordID IN %@", snacksInFav)
+                                                        let query = CKQuery(recordType: "Snack", predicate: predicate)
+                                                        
+                                                        self.database.perform(query, inZoneWith: nil, completionHandler: { (records, error) in
+                                                            
+                                                            var favoriet: FavForPers
+                                                            
+                                                            if error != nil {
+                                                                
+                                                            } else if let records = records {
+                                                                
+                                                                
+                                                                
+                                                                for record in records {
+                                                                    snacks.append(Snack(
+                                                                        naam: record.object(forKey: "naam") as! String,
+                                                                        image: record.object(forKey: "image") as! String,
+                                                                        categorie: record.object(forKey: "categorie") as! String,
+                                                                        recordId: record.recordID))
+                                                                }
+                                                                
+                                                            }
+                                                            
+                                                            let naam = record.object(forKey: "naam") as! String
+                                                            let opmerking = record.object(forKey: "opmerking") as! String
+                                                            
+                                                            favoriet = FavForPers(recordID: record.recordID,
+                                                                                  snacks: snacks,
+                                                                                  opmerking: opmerking,
+                                                                                  naam: naam)
+                                                            
+                                                            best.bestellingenPerPersoon[Usernaam] = favoriet
+                                                            
+                                                        })
+                                                        
+                                                    }
+
+                                                })
+
+                                            } else {
+                                                
+                                                best.bestellingenPerPersoon[Usernaam] = FavForPers()
+                                            }
+                                            print (best.bestellingenPerPersoon)
+                                        }
+                                        
+                                    }
+                                    
+                                })
                                 
                                 self.bestellingen.append(best)
+                                
                             }
                         }
                         
@@ -233,39 +308,57 @@ class BestellingenRepository {
             
             self.fetchRecord(record: userRecordID, done: { (userRecord) in
                 
-                let bestellingRecord = CKRecord(recordType: "Bestelling")
-                
-                bestellingRecord["name"] = name as CKRecordValue
-                
-                let reference = CKReference(recordID: userRecordID, action: .deleteSelf)
-                bestellingRecord["owner"] = reference as CKRecordValue
-                bestellingRecord["persons"] = [reference] as CKRecordValue
-                
-                self.database.save(bestellingRecord, completionHandler: { (record, error) in
-                    if error == nil {
-
-                        var refs: [CKReference]
-                        
-                        if let reft = userRecord!.object(forKey: "bestSubs"){
-                            refs = reft as! [CKReference]
-                        } else {
-                            refs = [CKReference]()
+                PersonalRepository().getUserName(completionHandler: { (username) in
+                    
+                    let favForPerson = CKRecord(recordType: "BestForPerson")
+                    favForPerson["personName"] = username as CKRecordValue
+                    
+                    self.database.save(favForPerson, completionHandler: { (record, error) in
+                        print (error)
+                        if error == nil {
+                            
+                            let bestellingRecord = CKRecord(recordType: "Bestelling")
+                            bestellingRecord["name"] = name as CKRecordValue
+                            
+                            let reference = CKReference(recordID: userRecordID, action: .deleteSelf)
+                            bestellingRecord["owner"] = reference as CKRecordValue
+                            bestellingRecord["persons"] = [reference] as CKRecordValue
+                            
+                            var bestForPerson: [CKReference] = []
+                            bestForPerson.append(CKReference(record: record!, action: CKReferenceAction.none))
+                            
+                            bestellingRecord.setObject(bestForPerson as CKRecordValue, forKey: "bestForPerson")
+                            
+                            self.database.save(bestellingRecord, completionHandler: { (record, error) in
+                                if error == nil {
+                                    
+                                    var refs: [CKReference]
+                                    
+                                    if let reft = userRecord!.object(forKey: "bestSubs"){
+                                        refs = reft as! [CKReference]
+                                    } else {
+                                        refs = [CKReference]()
+                                    }
+                                    
+                                    let newRef = CKReference(record: record!, action: CKReferenceAction.none)
+                                    
+                                    refs.append(newRef)
+                                    
+                                    userRecord!.setObject(refs as CKRecordValue, forKey: "bestSubs")
+                                    
+                                    self.database.save(userRecord!, completionHandler: { (_, error) in
+                                        
+                                        if error == nil {
+                                            completionHandler()
+                                        }
+                                        
+                                    })
+                                }
+                            })
+                            
                         }
-                        
-                        let newRef = CKReference(record: record!, action: CKReferenceAction.none)
-                        
-                        refs.append(newRef)
-                        
-                        userRecord!.setObject(refs as CKRecordValue, forKey: "bestSubs")
-                        
-                        self.database.save(userRecord!, completionHandler: { (_, error) in
-                            
-                            if error == nil {
-                                completionHandler()
-                            }
-                            
-                        })
-                    }
+                    })
+
                 })
                 
             })
@@ -305,21 +398,40 @@ class BestellingenRepository {
                     self.database.save(userRecord, completionHandler: { (_, error) in
                         
                         if error == nil {
-                         
-                            self.database.save(BestellingRecord, completionHandler: { (_, error) in
+                            
+                            PersonalRepository().getUserName(completionHandler: { (username) in
                                 
-                                if error == nil {
-                                    
-                                    completionHandler(true, "subscribed!")
-                                    
-                                } else {
-                                    completionHandler(false, "BestellingRecord failed!")
-                                    
-                                }
+                                let favForPerson = CKRecord(recordType: "BestForPerson")
+                                favForPerson["personName"] = username as CKRecordValue
                                 
-                                
+                                self.database.save(favForPerson, completionHandler: { (record, error) in
+                                    //print (error)
+                                    if error == nil {
+                                        
+                                        var bestForPersons = BestellingRecord.object(forKey: "bestForPerson") as! [CKReference]
+                                        bestForPersons.append(CKReference(record: record!, action: CKReferenceAction.none))
+                                        
+                                        BestellingRecord.setObject(bestForPersons as CKRecordValue, forKey: "bestForPerson")
+                                        
+                                        self.database.save(BestellingRecord, completionHandler: { (_, error) in
+                                            
+                                            if error == nil {
+                                                
+                                                completionHandler(true, "subscribed!")
+                                                
+                                            } else {
+                                                
+                                                completionHandler(false, "BestellingRecord failed!")
+                                                
+                                            }
+
+                                        })
+                                        
+                                    }
+                                })
                                 
                             })
+
                             
                         } else {
                             completionHandler(false, "userRecord failed!")

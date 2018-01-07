@@ -1,5 +1,5 @@
 //
-//  FavTableViewCell.swift
+//  bestellingFavorite.swift
 //  WhereAreMyFries
 //
 //  Created by Pieter-Jan Philips on 07/01/2018.
@@ -8,10 +8,10 @@
 
 import UIKit
 
-class FavTableViewCell: UITableViewCell {
+class bestellingFavorite: UITableViewCell {
 
-    @IBOutlet weak var namelabel: UILabel!
-    @IBOutlet weak var detailLabel: UITextView!
+    @IBOutlet weak var nameText: UILabel!
+    @IBOutlet weak var bestellingText: UITextView!
     
     override func awakeFromNib() {
         super.awakeFromNib()

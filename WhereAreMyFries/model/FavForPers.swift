@@ -23,6 +23,13 @@ class FavForPers {
         self.naam = naam
     }
     
+    init() {
+        self.recordID = nil
+        self.snacks = []
+        self.opmerking = ""
+        self.naam = ""
+    }
+    
     func toString() -> String {
         var string = "\(opmerking ?? "Geen opmerkingen") \n"
         for snack in snacks! {
